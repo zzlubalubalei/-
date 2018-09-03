@@ -1,0 +1,24 @@
+三次握手：首先Client发送连接请求SYN报文，Server接受连接之后回复ACK报文并为连接分配资源，Client接受SYN+ACK报文之后也向Server发送ACK报文并分配资源。
+四次挥手：假设Client发送断开连接请求，发送FIN报文。
+    
+    Client：“我没啥数据要发了，你要是还有数据没发完可以继续发，不着急关闭socket，可以继续发”
+
+Server收到FIN之后发送ACK
+
+    Server：“我收到你的请求了，但是我还没有准备好呢，请你稍等我的下个消息”
+ 
+Client收到ACK之后变为FIN_WAIT_2
+Server数据确定发送完成了，向Client发送FIN
+    
+    Server：“好了，数据发完了，准备好关闭连接了~”
+    
+Client接收到FIN之后
+
+    Client：“知道了，可以关闭连接了”
+      
+Client发送ACK进入TIME_WAIT状态
+Server接收到ACK之后
+
+    Server：“知道了断开连接啦”
+    
+Client等待2MSL之后无回复则关闭转为Close状态
