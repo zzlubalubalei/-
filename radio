@@ -5,6 +5,68 @@
   input{border: 1px solid rgb(169,169,169);height: 23px;padding:0px 5px;}
   input:hover{border: 1px solid #393D49;}
 </style>
+<script>
+        function b_typeName(){
+            var reg = /^.{1,32}$/; // 用户名-正则表达式
+            var c_use = document.getElementById("typeName").value;
+            var c_span_use = document.getElementById("span_typeName");
+            if(reg.test(c_use)){
+                c_span_use.innerHTML="√";
+                return true;
+              }else {
+                c_span_use.innerHTML="用户名必须小于32位";  
+              }        
+        }
+    
+        function b_index1(){
+            var index1 = document.getElementById("indexName1").value;
+            var index2 = document.getElementById("indexName2").value;
+            var index3 = document.getElementById("indexName3").value;
+            var c_span_index1 = document.getElementById("span_indexName1");
+            //var c_span_index2 = document.getElementById("span_indexName2");
+            //var c_span_index3 = document.getElementById("span_indexName3");
+            if((index1 == index2 && index1!="") || (index1 == index3 && index1!="")){
+                c_span_index1.innerHTML="请勿输入相同字符";
+                return false;
+              }else{
+                c_span_index1.innerHTML="√";  
+                return true;
+              }    
+        }
+        function b_index2(){
+            var index1 = document.getElementById("indexName1").value;
+            var index2 = document.getElementById("indexName2").value;
+            var index3 = document.getElementById("indexName3").value;
+            //var c_span_index1 = document.getElementById("span_indexName1");
+            var c_span_index2 = document.getElementById("span_indexName2");
+            //var c_span_index3 = document.getElementById("span_indexName3");
+            if((index2 == index1 && index2!="") || (index2 == index3 && index2!="")){
+                c_span_index2.innerHTML="请勿输入相同字符";
+                return false;
+              }else{
+                c_span_index2.innerHTML="√";  
+                return true;
+              }    
+        }
+        function b_index3(){
+            var index1 = document.getElementById("indexName1").value;
+            var index2 = document.getElementById("indexName2").value;
+            var index3 = document.getElementById("indexName3").value;
+            //var c_span_index1 = document.getElementById("span_indexName1");
+            //var c_span_index2 = document.getElementById("span_indexName2");
+            var c_span_index3 = document.getElementById("span_indexName3");
+            if((index3 == index1 && index3!="") || (index3 == index2 && index3!="")){
+                c_span_index3.innerHTML="请勿输入相同字符";
+                return false;
+              }else{
+                c_span_index3.innerHTML="√";  
+                return true;
+              }    
+        }
+    
+    
+
+</script>
 </head>
 <body >
 
@@ -76,7 +138,8 @@
               <tr>
                   <td>-</td>
                   <td>
-                    <input placeholder="类型名(max_32)...">
+                    <input placeholder="类型名(max_32)..." lay-verify="first" id="typeName" onblur="b_typeName()"><br>
+                    <span id="span_typeName"></span>
                   </td>
                   <td>
                     <select>
@@ -85,7 +148,8 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input placeholder="指标名...">
+                    <input placeholder="指标名..." lay-verify="zhiBiao1" id="indexName1" required lay-verify="required" onblur="b_index1()"><br>
+                    <span id="span_indexName1"></span>  
                   </td>
                   <td>
                     <select>
@@ -94,7 +158,8 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input placeholder="指标名...">
+                    <input placeholder="指标名..." lay-verify="zhiBiao2" id="indexName2" required lay-verify="regPwd" onblur="b_index2()"><br>
+                    <span id="span_indexName2"></span>  
                   </td>
                   <td>
                     <select>
@@ -103,7 +168,8 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input placeholder="指标名...">
+                    <input placeholder="指标名..." lay-verify="zhiBiao3" id="indexName3" required lay-verify="regPwd1" onblur="b_index3()" ><br>
+                    <span id="span_indexName3"></span>
                   </td>
               </tr>
               <tr>
@@ -167,6 +233,7 @@
             //$('#test1').val(this.value);
             //$('#test2').val(this.value);
         });
+
         
 	});
 </script>
