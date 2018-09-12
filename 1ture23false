@@ -86,7 +86,7 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao1" id="indexName1" required lay-verify="required"><br>
+                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao1" id="indexName1" required lay-verify="required" onblur="check_length32();check_elements();check_metric_names();"><br>
                     <span id="span_indexName1"></span>
                   </td>
                   <td>
@@ -96,7 +96,7 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao2" id="indexName2" required lay-verify="regPwd"><br>
+                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao2" id="indexName2" required lay-verify="regPwd" onblur="check_length32();check_elements();check_metric_names();"><br>
                     <span id="span_indexName2"></span>
                   </td>
                   <td>
@@ -106,7 +106,7 @@
                       <option value="2">交易成功率</option>
                       <option value="3">交易耗时</option>
                     </select>
-                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao3" id="indexName3" required lay-verify="regPwd1" ><br>
+                    <input class="di-metric-check" placeholder="指标名..." lay-verify="zhiBiao3" id="indexName3" required lay-verify="regPwd1" onblur="check_length32();check_elements();check_metric_names();"><br>
                     <span id="span_indexName3"></span>
                   </td>
               </tr>
@@ -178,44 +178,151 @@
 
 <script>
 
-  $(document).on('blur','.di-metric-check',function(){
-
-    var curVal = $(this).val();
-      console.log(curVal.val);
-    
-      var templist = [];
-    
-
-    $('.di-metric-check').not($(this)).each(function(k,el){
-
-      var tempVal = $(el).val();
-        templist.push(tempVal);
-
-      if(curVal==tempVal){
+//  $(document).on('blur','.di-metric-check',function(){
+//
+//    var curVal = $(this).val();
+//      console.log(curVal.val);
+//      var result = 0;
+//      var templist = [];
+//      var obj = {};
+//    $('.di-metric-check').not($(this)).each(function(k,el){
+//
+//      var tempVal = $(el).val();
+//        console.log($(el).val());
+//      if(!obj[tempVal]){
+//    
+//        templist.push(tempVal);
+//        obj[tempVal] = 1;
+//      }
+//        len = templist.length;
+//        console.log(len+'len');
+//    
+//        lenTemp = $('.di-metric-check').not($(this)).length;
+//        console.log(lenTemp+'lenTemp');    
+//      if(curVal==tempVal){
+//        
+//        result = 1;
+//        
+//        //    
+//      }
+//    });
+//
+//
+//    if(result){
+//        console.log('重名');
+//    }else{
+//        console.log('所有不重名');
+//    }
+//    
+//
+//  })
+//    
+   function check_elements(){
+       
+       var curVal = $('.di-metric-check').val();
         
-        result = 1;
+       console.log(curVal+'curVal');
+            
+       var repeat = 0;
+       
+       var templist = [];
+            
+       $('.di-metric-check').not($(this)).each(function(k,el){
+                
+           var eleVal = $(el).val();
+           
+           console.log(eleVal+'eleVal');
 
-        //加*号
-          
-      }
+           if(templist.indexOf(eleVal)!=-1){
+                
+                console.log('重名');
+                
+                repeat = 1;
+                
+                return true;    
+            }else{
+                
+                templist.push(eleVal);
+                
+                console.log('所有不重名');
+            }
+           if(curVal == eleVal){
+           
+               repeat = 1;
+            }
+        })
+        
+       if(repeat){
+       
+           console.log('重名');
+        
+       }else{
+       
+           console.log('所有不重名');
+       }
 
-    })
-      
+   }
     
-      
-    if(result){
-      console.log('重名');
-    }else{
-      console.log('所有不重名');
+    function check_metric_names(){
+        
+        var result = [];
+        
+        $('.di-metric-check').each(function(k,el){
+            
+            var tempval = $(el).val();
+            
+            console.log(tempval+'tempval');
+            
+            if(result.indexOf(tempval)!=-1){
+                
+                console.log('重名');
+                
+                return true;    
+            }else{
+                
+                result.push(tempval);
+                
+                console.log('所有不重名');
+            }
+            
+        })
+        
+        return false;
+        
+          
     }
-
-  })
-
-</script>
-
-<script>
-
-  function b_typeName(){
+    
+    function check_length32(){
+        var reg = /^.{1,32}$/; // 用户名-正则表达式
+        var index1 = document.getElementById("indexName1").value;
+        var index2 = document.getElementById("indexName2").value;
+        var index3 = document.getElementById("indexName3").value;
+        
+        var c_span_index1 = document.getElementById("span_indexName1");
+        var c_span_index2 = document.getElementById("span_indexName2");
+        var c_span_index3 = document.getElementById("span_indexName3");
+        
+        if(reg.test(index1)){
+            c_span_index1.innerHTML="√";
+            //return true;
+        }else if(index1!= ""){
+            c_span_index1.innerHTML="用户名必须小于32位";
+        }
+        if(reg.test(index2)){
+            c_span_index2.innerHTML="√";
+            //return true;
+        }else if(index2!= ""){
+            c_span_index2.innerHTML="用户名必须小于32位";
+        }
+        if(reg.test(index3)){
+            c_span_index3.innerHTML="√";
+           // return true;
+        }else if(index3!= ""){
+            c_span_index3.innerHTML="用户名必须小于32位";
+        }
+    }
+    
+   function b_typeName(){
       var reg = /^.{1,32}$/; // 用户名-正则表达式
       var c_use = document.getElementById("typeName").value;
       var c_span_use = document.getElementById("span_typeName");
@@ -227,7 +334,45 @@
         }
   }
 
-  function b_index1(){
+</script>
+
+<script>
+
+//  function b_index1(){
+//      var reg = /^.{1,32}$/; // 用户名-正则表达式
+//      var index1 = document.getElementById("indexName1").value;
+//      var c_span_index1 = document.getElementById("span_indexName1");
+//      if(reg.test(index1)){
+//          c_span_index1.innerHTML="√";
+//          return true;
+//        }else {
+//          c_span_index1.innerHTML="用户名必须小于32位";
+//        }
+//  }
+//  function b_index2(){
+//      var reg = /^.{1,32}$/; // 用户名-正则表达式
+//      var index2 = document.getElementById("indexName2").value;
+//      var c_span_index2 = document.getElementById("span_indexName2");
+//      if(reg.test(index2)){
+//          c_span_index2.innerHTML="√";
+//          return true;
+//        }else {
+//          c_span_index2.innerHTML="用户名必须小于32位";
+//        }
+//  }
+//  function b_index3(){
+//      var reg = /^.{1,32}$/; // 用户名-正则表达式
+//      var index3 = document.getElementById("indexName3").value;
+//      var c_span_index3 = document.getElementById("span_indexName3");
+//      if(reg.test(index3)){
+//          c_span_index3.innerHTML="√";
+//          return true;
+//        }else {
+//          c_span_index3.innerHTML="用户名必须小于32位";
+//        }
+//  }
+
+ /* function b_index1(){
       var index1 = document.getElementById("indexName1").value;
       var index2 = document.getElementById("indexName2").value;
       var index3 = document.getElementById("indexName3").value;
@@ -271,7 +416,7 @@
           c_span_index3.innerHTML="√";
           return true;
         }
-  }
+  }*/
 
 </script>
 </body>
