@@ -1,0 +1,242 @@
+<!--{include file="templates/public/header.tpl"}-->
+</head>
+<style>
+  td b{margin-right: 5px;}
+</style>
+<body >
+  <div style="background:#fff;margin:15px;padding-bottom:15px;">
+    <div class="hink-box-t" style="margin-bottom:0px;">
+      <p class="hink-box-t-p">
+        <span>
+          用户信息
+        </span>
+      </p>
+    </div>
+
+    <div style="padding:15px 15px 0px 15px;">
+
+      <div class="add_subuser">
+
+        <button class="layui-btn layui-btn-small"><i class="fa fa-user-circle" aria-hidden="true"></i> 增加子账号</button>
+
+      </div>
+
+      <table class="layui-table di-user-tb" cellspacing="0" style="width:100%;">
+          <thead>
+              <tr >
+                  <th>用户名称</th>
+                  <th>最后登陆时间</th>
+                  <th>角色</th>
+                  <th>注册时间</th>
+                  <th>操作</th>
+                  <th>状态</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- <tr>
+                  <td><b>|</b>Admin</td>
+                  <td>2018-09-01-01</td>
+                  <td>1</td>
+                  <td>2018-09-01-01</td>
+                  <td>
+                    <button class="layui-btn layui-btn-mini layui-bg-blue edit_subuser">编辑</button>
+                  </td>
+              </tr> -->
+              <!-- <tr>
+                  <td class="user_name"><b>|—</b>user123</td>
+                  <td>2018-09-01-01</td>
+                  <td>2</td>
+                  <td>2018-09-01-01</td>
+                  <td>
+                    <button class="layui-btn layui-btn-mini layui-bg-blue edit_subuser">编辑</button>
+                    <button class="layui-btn layui-btn-mini layui-bg-red delete_subuser">删除</button>
+                  </td>
+              </tr> -->
+
+          </tbody>
+      </table>
+
+    </div>
+
+  </div>
+<script src="assets/ohter/jquery-1.12.4.js"></script>
+<script src="assets/ohter/jquery.dataTables.min.js"></script>
+<script src="assets/ohter/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="plugins/layui2.0/layui.js"></script>
+
+
+<script>
+
+  function get_table_content_str(data){
+
+    var str = '';
+
+    for(var i in data){
+
+        str +=['              <tr>',
+          '                  <td class="user_name">'+data[i].username+'</td>',
+          '                  <td>'+data[i].lastLoginTime+'</td>',
+          '                  <td class="role_id">'+data[i].roleId+'</td>',
+          '                  <td>'+data[i].createTime+'</td>',
+          '                  <td>'+data[i].status+'</td>',
+          '                  <td>',
+          '                    <button class="layui-btn layui-btn-mini layui-bg-blue edit_subuser">编辑</button>',
+          '                    <button class="layui-btn layui-btn-mini layui-bg-red delete_subuser">删除</button>',
+          '                  </td>',
+          '              </tr>'].join("");
+
+    }
+
+    return str;
+
+ }
+
+</script>
+
+<script>
+    
+    function roleId_delete(data){
+        
+        var roleIdArray = [];
+        
+        for(var i in data){
+            
+            var roleIdIndi = data[i].roleId;
+            
+            roleIdArray.push(roleIdIndi);
+        
+        }
+        console.log(roleIdArray);
+        
+        for(var j in roleIdArray){
+            
+            if(roleIdArray[j] == '0'){
+                
+
+                
+                var abca = $("tr:eq(j)").children('td:eq(5)').find('.delete_subuser').hide();//???
+            
+            }else{
+            
+                console.log(roleIdArray[j]);
+            
+            }
+            
+        }
+    }
+</script>    
+    
+<script>
+	layui.use(['layer','element','laydate','form'], function(){
+		$ = layui.jquery;
+        form = layui.form;
+        layer = layui.layer;
+        laydate = layui.laydate;
+        element = layui.element;
+	});
+
+//
+//    window.onload = function(data){
+//        
+//        $('.di-user-tb tbody').empty();
+//        
+//            var abc = roleId_delete(data.accountInfos);
+//        console.log(data.accountInfos);
+//
+//        $('.di-user-tb tbody').append(abc);
+//    }
+//    
+    
+    
+    $.ajax({
+        type:'POST',
+        url:'./user_table.php',
+        success:function(data){
+
+            var data = $.parseJSON(data);
+            console.log(data);
+
+            $('.di-user-tb tbody').empty();
+            var datastr = get_table_content_str(data.accountInfos);
+            var abc = roleId_delete(data.accountInfos);
+           // console.log(abc);
+            $('.di-user-tb tbody').append(datastr);
+
+
+        },
+        datatype:'json'
+   });
+
+   $('.add_subuser').on('click',function(){
+       layer.open({
+            title: '增加子账号',
+            maxmin: true,
+            type: 2,
+            content: 'user_add_subuser.php',
+            area: ['800px', '460px'],
+            offset:'25px'
+      });
+
+   })
+
+    
+    $(document).on('click','.edit_subuser',function(){
+        
+        var userLocalName = $(this).parents('tr').find('.user_name').text();
+       // console.log(userLocalName);
+        
+        parinfo = {
+            userLocalName:userLocalName
+        };
+       // console.log(parinfo);
+        layer.open({
+           title: '编辑子账号',
+           maxmin: true,
+           type:2,
+           content:'user_edit_subuser.php',
+           area:['800px','460px'],
+           offset:'25px'
+       });
+
+   })
+    $(document).on('click','.delete_subuser',function(){
+       //var username_dele = $(this).parent().parent().children('td:eq(0)').text();
+       var username_dele = $(this).parents('tr').find('.user_name').text();
+       var trindex = $(this).index();
+       var obj_del={
+           username:username_dele
+         }
+
+       var idx = layer.confirm('您确定要删除该用户吗?',{
+           btn: ['确定','取消'],
+           title:"提示"
+       },function(data){
+           console.log(data);
+           $.ajax({
+              type:'POST',
+              url:'./user_delete.php',
+              data:obj_del,
+              datatype:'json',
+              success:function(data){
+                var data = $.parseJSON(data);
+                if(data.errCode == 0){
+                    //$(this).parent("td").parent("tr").remove();
+                    $('.di-user-tb tbody tr').eq(trindex).remove();
+                    layer.close(idx);
+                }else{
+                    layer.msg(data.errMsg);
+                }
+              }
+           });
+
+    });
+
+   })
+
+</script>
+
+
+
+</body>
+
+</html>
